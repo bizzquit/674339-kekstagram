@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Сергей Алисионок](https://up.htmlacademy.ru/javascript/16/user/674339).
-* Наставник: `Неизвестно`.
+* Наставник: [Полина Катышева](https://htmlacademy.ru/profile/polina).
 
 ---
 
