@@ -58,7 +58,6 @@ var similarPictureTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture_img');
 
-var fragment = document.createDocumentFragment();
 
 /* Клонируем шаблон*/
 
@@ -66,9 +65,6 @@ var pictureTemplate = similarPictureTemplate.cloneNode(true);
 
 /* добавляем в родителя*/
 parentBlog.appendChild(pictureTemplate);
-
-
-console.log(similarPictureTemplate);
 
 
 /*
