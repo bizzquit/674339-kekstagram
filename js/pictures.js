@@ -47,28 +47,37 @@ for (var i = 1; i <= sumPictures; i++) {
   pictures.push(object);
 }
 
+
 /* 2) Создание Шаблона  */
 
 /* Находим контейнер родителя - куда будем вставлять */
 var parentBlog = document.querySelector('.pictures');
 
 /* Находим контейнер для копирования */
-
 var similarPictureTemplate = document.querySelector('#picture')
   .content
-  .querySelector('.picture_img');
+  .querySelector('.picture');
+
+var imageSrc = similarPictureTemplate.querySelector('.picture__img');
+var commentText = similarPictureTemplate.querySelector('.picture__comments');
+var sumLikes = similarPictureTemplate.querySelector('.picture__likes');
 
 
-/* Клонируем шаблон*/
-
-var pictureTemplate = similarPictureTemplate.cloneNode(true);
-
-/* добавляем в родителя*/
-parentBlog.appendChild(pictureTemplate);
+for (i = 0; i < 25; i++) {
+  imageSrc.setAttribute('src', pictures[i].url); // Вставляем адрес картинки
+  commentText.textContent = pictures[i].comments[comment].length; // Вставляем кол-во комментов
+  sumLikes.textContent = pictures[i].likes; // Вставляем кол-во лайков
+  /* Клонируем шаблон*/
+  var pictureTemplate = similarPictureTemplate.cloneNode(true);
+  /* добавляем в родителя*/
+  parentBlog.appendChild(pictureTemplate);
+}
 
 
 /*
 console.log('Случайный комментарий: - " ' + comments[comment] + ' "');
 console.log('Случайное описание: - " ' + descriptions[description] + ' "');
 console.log('Количество лайков: ' + like);
-console.dir(pictures);*/
+console.dir(pictures);
+console.log(pictures[3].comments[comment].length);
+*/
