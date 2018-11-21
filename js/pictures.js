@@ -1,3 +1,4 @@
+'use strict';
 /* Переменные */
 var minPictureLike = 15; // минимальное кол-во лайков
 var maxPictureLike = 200; // максимальное кол-во лайков
@@ -35,7 +36,7 @@ for (var i = 1; i <= sumPictures; i++) {
   /* Определяем случайный коммент */
   var comment = Math.floor(Math.random() * comments.length);
   /* Определяем случайное кол-во лайков */
-  var like = Math.floor(Math.random()*(maxPictureLike - minPictureLike) + minPictureLike);
+  var like = Math.floor(Math.random() * (maxPictureLike - minPictureLike) + minPictureLike);
   var object = ({
     url: 'photos/' + i + '.jpg',
     likes: like,
@@ -48,6 +49,26 @@ for (var i = 1; i <= sumPictures; i++) {
 
 /* 2) Создание Шаблона  */
 
+/* Находим контейнер родителя - куда будем вставлять */
+var parentBlog = document.querySelector('.pictures');
+
+/* Находим контейнер для копирования */
+
+var similarPictureTemplate = document.querySelector('#picture')
+  .content
+  .querySelector('.picture_img');
+
+var fragment = document.createDocumentFragment();
+
+/* Клонируем шаблон*/
+
+var pictureTemplate = similarPictureTemplate.cloneNode(true);
+
+/* добавляем в родителя*/
+parentBlog.appendChild(pictureTemplate);
+
+
+console.log(similarPictureTemplate);
 
 
 /*
