@@ -40,7 +40,7 @@ for (var i = 1; i <= sumPictures; i++) {
   for (var n = 0; n < randomNumber; n++) {
     var commentRandom = Math.floor(Math.random() * comments.length);
     var commentObject = ({
-      comments: comments[commentRandom]
+      comment: comments[commentRandom]
     });
     commentArr.push(commentObject);
   }
@@ -92,14 +92,44 @@ bigPicturesBlock.querySelector('.social__caption').textContent = pictures[elemen
 bigPicturesBlock.querySelector('.comments-count').textContent = pictures[elementArr].comments.length;
 
 /* Вставляем комментарии */
-/* var socialCommentsBlocks = bigPicturesBlock.querySelector('.social__comments');
-var socialCommentsBlock = bigPicturesBlock.querySelector('.social__comment').cloneNode(true);
+var socialCommentsBlocks = bigPicturesBlock.querySelector('.social__comments'); // Родитель для комментов
+socialCommentsBlocks.innerHTML = ''; // Чистим контейнер с комментами
+var similarCommentTemplate = document.querySelector('#social-comment')
+  .content
+  .querySelector('.social__comment');
 
-var avatar = Math.floor(Math.random() * 6) + 1;
+/* Прячем счетчик коментов и загрузку новых*/
+document.querySelector('.social__comment-count').classList.add('visually-hidden');
+document.querySelector('.comments-loader').classList.add('visually-hidden');
 
-console.log(socialCommentsBlocks.children.length);
-console.log(avatar);*/
+
+/* Делаем цикл по добавлению комментов в Биг-Фото
+ 1) Определяем сколько коментов и пихаем в переменную commentLegth */
+var fragmentForComments = document.createDocumentFragment();
+
+var imageSrcAvatar = similarCommentTemplate.querySelector('.social__picture');
+var socialText = similarCommentTemplate.querySelector('.social__text');
+
+for (var y = 0; y < pictures[elementArr].comments.length; y++) {
+  /* Случайный аватар*/
+  var avatar = Math.floor(Math.random() * 6) + 1;
+  /* Подставляем данные */
+  imageSrcAvatar.setAttribute('src', 'img/avatar-' + avatar + '.svg');
+  socialText.textContent = pictures[0].comments[y].comment;
+
+  /* Копируем шаблон, пихаем в него данные и кидаем в родителя*/
+  var socialTemplate = similarCommentTemplate.cloneNode(true);
+  fragmentForComments.appendChild(socialTemplate);
+}
+socialCommentsBlocks.appendChild(fragmentForComments);
+
+
 /*
+console.log(pictures[elementArr].comments.length);
+console.log(pictures);
+console.log(pictures[0].comments[0].comment);
+console.log(socialCommentsBlocks.children.length);
+console.log(avatar);
 console.log('Случайный комментарий: - " ' + comments[comment] + ' "');
 console.log('Случайное описание: - " ' + descriptions[description] + ' "');
 console.log('Количество лайков: ' + like);
