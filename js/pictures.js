@@ -35,21 +35,21 @@ for (var i = 1; i <= sumPictures; i++) {
   /* Определяем случайное описание */
   var description = Math.floor(Math.random() * descriptions.length);
   /* Определяем случайный коммент и случайное кол-во */
-  var commentArr = [];
+  var commentsArr = [];
   var randomNumber = Math.floor(Math.random() * maxComment) + 1;
   for (var n = 0; n < randomNumber; n++) {
     var commentRandom = Math.floor(Math.random() * comments.length);
     var commentObject = ({
       comment: comments[commentRandom]
     });
-    commentArr.push(commentObject);
+    commentsArr.push(commentObject);
   }
   /* Определяем случайное кол-во лайков */
   var like = Math.floor(Math.random() * (maxPictureLike - minPictureLike) + minPictureLike);
   var object = ({
     url: 'photos/' + i + '.jpg',
     likes: like,
-    comments: commentArr,
+    comments: commentsArr,
     description: descriptions[description]
   });
   /* добавляем элемент в конец массива*/
@@ -115,7 +115,7 @@ for (var y = 0; y < pictures[elementArr].comments.length; y++) {
   var avatar = Math.floor(Math.random() * 6) + 1;
   /* Подставляем данные */
   imageSrcAvatar.setAttribute('src', 'img/avatar-' + avatar + '.svg');
-  socialText.textContent = pictures[0].comments[y].comment;
+  socialText.textContent = pictures[elementArr].comments[y].comment;
 
   /* Копируем шаблон, пихаем в него данные и кидаем в родителя*/
   var socialTemplate = similarCommentTemplate.cloneNode(true);
