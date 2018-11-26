@@ -29,25 +29,20 @@ var descriptions = [
   'Вот это тачка!'
 ];
 
-/* создаю массив фотографий pictures[]; и записываю в него данные от 1-25 со случайными данными*/
-var pictures = [];
-for (var i = 1; i <= sumPictures; i++) {
-  /* Определяем случайное описание */
-  var description = Math.floor(Math.random() * descriptions.length);
-  /* Определяем случайный коммент и случайное кол-во */
-  var commentsArr = [];
-  var randomNumber = Math.floor(Math.random() * maxComment) + 1;
-  for (var n = 0; n < randomNumber; n++) {
-    var commentRandom = Math.floor(Math.random() * comments.length);
-    var commentObject = ({
-      comment: comments[commentRandom]
-    });
-    commentsArr.push(commentObject);
-  }
-  /* Определяем случайное кол-во лайков */
+/* функция - Определяем случайное кол-во лайков */
+function addRandomComment() {
+  var commentRandom = Math.floor(Math.random() * comments.length);
+  var commentObject = ({
+    comment: comments[commentRandom]
+  });
+  commentsArr.push(commentObject);
+}
+
+/* Функция формирования объекта*/
+function addPhotoObjects(numberPhoto) {
   var like = Math.floor(Math.random() * (maxPictureLike - minPictureLike) + minPictureLike);
   var object = ({
-    url: 'photos/' + i + '.jpg',
+    url: 'photos/' + numberPhoto + '.jpg',
     likes: like,
     comments: commentsArr,
     description: descriptions[description]
@@ -56,11 +51,44 @@ for (var i = 1; i <= sumPictures; i++) {
   pictures.push(object);
 }
 
-/* 2) Создание Шаблона  */
+/* Функция - Случайный аватар*/
+function showBigPhotoWithComments(numComments) {
+  var avatar = Math.floor(Math.random() * 6) + 1;
+  /* Подставляем данные */
+  imageSrcAvatar.setAttribute('src', 'img/avatar-' + avatar + '.svg');
+  socialText.textContent = pictures[elementArr].comments[numComments].comment;
 
+  /* Копируем шаблон, пихаем в него данные и кидаем в родителя*/
+  var socialTemplate = similarCommentTemplate.cloneNode(true);
+  fragmentForComments.appendChild(socialTemplate);
+}
+
+/* Функция добавления данных в шаблон*/
+function addDataToTemplete(arrElement) {
+  imageSrc.setAttribute('src', pictures[arrElement].url); // Вставляем адрес картинки
+  commentText.textContent = pictures[arrElement].comments.length; // Вставляем кол-во комментов
+  sumLikes.textContent = pictures[arrElement].likes; // Вставляем кол-во лайков
+  /* Клонируем шаблон*/
+  var pictureTemplate = similarPictureTemplate.cloneNode(true);
+  fragment.appendChild(pictureTemplate);
+}
+
+
+/* создаю массив фотографий pictures[]; и записываю в него данные от 1-25 со случайными данными*/
+var pictures = [];
+for (var i = 1; i <= sumPictures; i++) {
+  var description = Math.floor(Math.random() * descriptions.length);
+  var commentsArr = [];
+  var randomNumber = Math.floor(Math.random() * maxComment) + 1;
+  for (var n = 0; n < randomNumber; n++) {
+    addRandomComment();
+  }
+  addPhotoObjects(i);
+}
+
+/* 2) Создание Шаблона  */
 /* Находим контейнер родителя - куда будем вставлять */
 var parentBlog = document.querySelector('.pictures');
-
 /* Находим контейнер для копирования */
 var similarPictureTemplate = document.querySelector('#picture')
   .content
@@ -72,29 +100,29 @@ var sumLikes = similarPictureTemplate.querySelector('.picture__likes');
 
 var fragment = document.createDocumentFragment();
 for (i = 0; i < sumPictures; i++) {
-  imageSrc.setAttribute('src', pictures[i].url); // Вставляем адрес картинки
-  commentText.textContent = pictures[i].comments.length; // Вставляем кол-во комментов
-  sumLikes.textContent = pictures[i].likes; // Вставляем кол-во лайков
-  /* Клонируем шаблон*/
-  var pictureTemplate = similarPictureTemplate.cloneNode(true);
-  /* добавляем в родителя*/
-  fragment.appendChild(pictureTemplate);
+  addDataToTemplete(i);
 }
+/* добавляем в родителя что получилось*/
 parentBlog.appendChild(fragment);
 
-/* Вставляем данные 1-го элемента массива фото в блок big-picture */
+/* Вставляем данные N-го элемента массива фото в блок big-picture */
 var bigPicturesBlock = document.querySelector('.big-picture');
-var elementArr = 0; // 1-й элемент массива pictures[]
+var elementArr = Math.floor(Math.random() * pictures.length); // N-й элемент массива pictures[]
 bigPicturesBlock.classList.remove('hidden');
-bigPicturesBlock.querySelector('.big-picture__img img').setAttribute('src', pictures[0].url);
-bigPicturesBlock.querySelector('.likes-count').textContent = pictures[elementArr].likes;
-bigPicturesBlock.querySelector('.social__caption').textContent = pictures[elementArr].description;
-bigPicturesBlock.querySelector('.comments-count').textContent = pictures[elementArr].comments.length;
+bigPicturesBlock.querySelector('.big-picture__img img')
+  .setAttribute('src', pictures[elementArr].url);
+bigPicturesBlock.querySelector('.likes-count')
+  .textContent = pictures[elementArr].likes;
+bigPicturesBlock.querySelector('.social__caption')
+  .textContent = pictures[elementArr].description;
+bigPicturesBlock.querySelector('.comments-count')
+  .textContent = pictures[elementArr]
+  .comments.length;
 
 /* Вставляем комментарии */
 var socialCommentsBlocks = bigPicturesBlock.querySelector('.social__comments'); // Родитель для комментов
 socialCommentsBlocks.innerHTML = ''; // Чистим контейнер с комментами
-var similarCommentTemplate = document.querySelector('#social-comment')
+var similarCommentTemplate = document.querySelector('#social__comments')
   .content
   .querySelector('.social__comment');
 
@@ -106,20 +134,11 @@ document.querySelector('.comments-loader').classList.add('visually-hidden');
 /* Делаем цикл по добавлению комментов в Биг-Фото
  1) Определяем сколько коментов и пихаем в переменную commentLegth */
 var fragmentForComments = document.createDocumentFragment();
-
 var imageSrcAvatar = similarCommentTemplate.querySelector('.social__picture');
 var socialText = similarCommentTemplate.querySelector('.social__text');
 
 for (var y = 0; y < pictures[elementArr].comments.length; y++) {
-  /* Случайный аватар*/
-  var avatar = Math.floor(Math.random() * 6) + 1;
-  /* Подставляем данные */
-  imageSrcAvatar.setAttribute('src', 'img/avatar-' + avatar + '.svg');
-  socialText.textContent = pictures[elementArr].comments[y].comment;
-
-  /* Копируем шаблон, пихаем в него данные и кидаем в родителя*/
-  var socialTemplate = similarCommentTemplate.cloneNode(true);
-  fragmentForComments.appendChild(socialTemplate);
+  showBigPhotoWithComments(y);
 }
 socialCommentsBlocks.appendChild(fragmentForComments);
 
