@@ -64,7 +64,7 @@ function showBigPhotoWithComments(numComments) {
 }
 
 /* Функция добавления данных в шаблон*/
-function addDataToTemplete(arrElement) {
+function addDataToTemplate(arrElement) {
   imageSrc.setAttribute('src', pictures[arrElement].url); // Вставляем адрес картинки
   commentText.textContent = pictures[arrElement].comments.length; // Вставляем кол-во комментов
   sumLikes.textContent = pictures[arrElement].likes; // Вставляем кол-во лайков
@@ -100,7 +100,7 @@ var sumLikes = similarPictureTemplate.querySelector('.picture__likes');
 
 var fragment = document.createDocumentFragment();
 for (i = 0; i < sumPictures; i++) {
-  addDataToTemplete(i);
+  addDataToTemplate(i);
 }
 /* добавляем в родителя что получилось*/
 parentBlog.appendChild(fragment);
