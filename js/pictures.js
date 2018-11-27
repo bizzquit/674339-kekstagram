@@ -4,6 +4,99 @@ var MAX_PICTURE_LIKE = 200; // максимальное кол-во лайков
 var SUM_PICTURES = 25; // Кол-во фотографий других пользователей
 var MAX_COMMENT = 15; // Максимальное кол-во комментов
 
+/**
+ * функция для генерации массива случайных комментариев
+ * @function
+ */
+function addRandomComment() {
+  for (var n = 0; n < randomNumber; n++) {
+    var commentRandom = Math.floor(Math.random() * comments.length);
+    var commentObject = ({
+      comment: comments[commentRandom]
+    });
+    commentsArr.push(commentObject);
+  }
+}
+
+/**
+ * функция создает объект с рандомным числом лайков, массивом комментариев и случайным описанием.
+ * @function
+ * @param {number} numberPhoto порядковый номер элемента.
+ */
+function addPhotoObjects(numberPhoto) {
+  var like = Math.floor(Math.random() * (MAX_PICTURE_LIKE - MIN_PICTURE_LIKE) + MIN_PICTURE_LIKE);
+  var object = ({
+    url: 'photos/' + numberPhoto + '.jpg',
+    likes: like,
+    comments: commentsArr,
+    description: descriptions[description]
+  });
+  pictures.push(object);
+}
+
+/**
+ * Функция заполняет данные увеличеной фотографиию.
+ * @function
+ * @param {number} numComments элеммент массива pictures[].
+ */
+function showBigPhotoWithComments(numComments) {
+  var avatar = Math.floor(Math.random() * 6) + 1;
+  imageSrcAvatar.setAttribute('src', 'img/avatar-' + avatar + '.svg');
+  socialText.textContent = pictures[elementArr].comments[numComments].comment;
+  var socialTemplate = similarCommentTemplate.cloneNode(true);
+  addFragmentToParent(fragmentForComments, socialTemplate);
+}
+
+/**
+ * функция вставляет в родителя шаблон с заполнеными данными элемента массива
+ * @function
+ * @param {number} arrElement элемент массива pictures[].
+ */
+function addDataToTemplate(arrElement) {
+  imageSrc.setAttribute('src', pictures[arrElement].url);
+  commentText.textContent = pictures[arrElement].comments.length;
+  sumLikes.textContent = pictures[arrElement].likes;
+  var pictureTemplate = similarPictureTemplate.cloneNode(true);
+  addFragmentToParent(fragment, pictureTemplate);
+}
+
+/**
+ * функция создает массив случайных комментариев
+ * @function
+ */
+function addDescriptionAndRandomArrComments() {
+  description = Math.floor(Math.random() * descriptions.length);
+  commentsArr = [];
+  randomNumber = Math.floor(Math.random() * MAX_COMMENT) + 1;
+}
+
+/**
+ * Функция вставляет готовый фрагмент шаблона в нужное место.
+ * @function
+ * @param {string} parent элемент родителя.
+ * @param {string} element фрагмент.
+ */
+function addFragmentToParent(parent, element) {
+  parent.appendChild(element);
+}
+
+/**
+ * Функция добавляет элементы фотографии в разметку
+ * @function
+ */
+function addValuesToBigPhoto() {
+  bigPicturesBlock.querySelector('.big-picture__img img')
+    .setAttribute('src', pictures[elementArr].url);
+  bigPicturesBlock.querySelector('.likes-count')
+    .textContent = pictures[elementArr].likes;
+  bigPicturesBlock.querySelector('.social__caption')
+    .textContent = pictures[elementArr].description;
+  bigPicturesBlock.querySelector('.comments-count')
+    .textContent = pictures[elementArr]
+    .comments.length;
+}
+
+
 var comments = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
@@ -22,74 +115,11 @@ var descriptions = [
   'Вот это тачка!'
 ];
 
-function addRandomComment() {
-  for (var n = 0; n < randomNumber; n++) {
-    var commentRandom = Math.floor(Math.random() * comments.length);
-    var commentObject = ({
-      comment: comments[commentRandom]
-    });
-    commentsArr.push(commentObject);
-  }
-}
-
-function addPhotoObjects(numberPhoto) {
-  var like = Math.floor(Math.random() * (MAX_PICTURE_LIKE - MIN_PICTURE_LIKE) + MIN_PICTURE_LIKE);
-  var object = ({
-    url: 'photos/' + numberPhoto + '.jpg',
-    likes: like,
-    comments: commentsArr,
-    description: descriptions[description]
-  });
-  pictures.push(object);
-}
-
-function showBigPhotoWithComments(numComments) {
-  var avatar = Math.floor(Math.random() * 6) + 1;
-  imageSrcAvatar.setAttribute('src', 'img/avatar-' + avatar + '.svg');
-  socialText.textContent = pictures[elementArr].comments[numComments].comment;
-  var socialTemplate = similarCommentTemplate.cloneNode(true);
-  addFragmentToParent(fragmentForComments, socialTemplate);
-}
-
-function addDataToTemplate(arrElement) {
-  imageSrc.setAttribute('src', pictures[arrElement].url);
-  commentText.textContent = pictures[arrElement].comments.length;
-  sumLikes.textContent = pictures[arrElement].likes;
-  var pictureTemplate = similarPictureTemplate.cloneNode(true);
-  addFragmentToParent(fragment, pictureTemplate);
-}
-
 var description;
 var commentsArr;
 var randomNumber;
-function addDescriptionAndRandomArrComments() {
-  description = Math.floor(Math.random() * descriptions.length);
-  commentsArr = [];
-  randomNumber = Math.floor(Math.random() * MAX_COMMENT) + 1;
-}
-
-function addFragmentToParent(element, parent) {
-  element.appendChild(parent);
-}
-
-function addValuesToBigPhoto() {
-  bigPicturesBlock.querySelector('.big-picture__img img')
-    .setAttribute('src', pictures[elementArr].url);
-  bigPicturesBlock.querySelector('.likes-count')
-    .textContent = pictures[elementArr].likes;
-  bigPicturesBlock.querySelector('.social__caption')
-    .textContent = pictures[elementArr].description;
-  bigPicturesBlock.querySelector('.comments-count')
-    .textContent = pictures[elementArr]
-    .comments.length;
-}
 
 var pictures = [];
-for (var i = 1; i <= SUM_PICTURES; i++) {
-  addDescriptionAndRandomArrComments();
-  addRandomComment();
-  addPhotoObjects(i);
-}
 
 var parentBlog = document.querySelector('.pictures');
 var similarPictureTemplate = document.querySelector('#picture')
@@ -101,17 +131,9 @@ var commentText = similarPictureTemplate.querySelector('.picture__comments');
 var sumLikes = similarPictureTemplate.querySelector('.picture__likes');
 
 var fragment = document.createDocumentFragment();
-for (i = 0; i < SUM_PICTURES; i++) {
-  addDataToTemplate(i);
-}
-addFragmentToParent(parentBlog, fragment);
 
 var bigPicturesBlock = document.querySelector('.big-picture');
 var elementArr = Math.floor(Math.random() * pictures.length);
-
-bigPicturesBlock.classList.remove('hidden');
-
-addValuesToBigPhoto();
 
 var socialCommentsBlocks = bigPicturesBlock.querySelector('.social__comments');
 socialCommentsBlocks.innerHTML = '';
@@ -119,13 +141,29 @@ var similarCommentTemplate = document.querySelector('#social__comments')
   .content
   .querySelector('.social__comment');
 
-document.querySelector('.social__comment-count').classList.add('visually-hidden');
-document.querySelector('.comments-loader').classList.add('visually-hidden');
-
 var imageSrcAvatar = similarCommentTemplate.querySelector('.social__picture');
 var socialText = similarCommentTemplate.querySelector('.social__text');
 
 var fragmentForComments = document.createDocumentFragment();
+
+for (var i = 1; i <= SUM_PICTURES; i++) {
+  addDescriptionAndRandomArrComments();
+  addRandomComment();
+  addPhotoObjects(i);
+}
+
+for (i = 0; i < SUM_PICTURES; i++) {
+  addDataToTemplate(i);
+}
+addFragmentToParent(parentBlog, fragment);
+
+bigPicturesBlock.classList.remove('hidden');
+
+addValuesToBigPhoto();
+
+document.querySelector('.social__comment-count').classList.add('visually-hidden');
+document.querySelector('.comments-loader').classList.add('visually-hidden');
+
 for (var y = 0; y < pictures[elementArr].comments.length; y++) {
   showBigPhotoWithComments(y);
 }
