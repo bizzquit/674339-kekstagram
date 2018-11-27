@@ -118,6 +118,7 @@ var descriptions = [
 var description;
 var commentsArr;
 var randomNumber;
+var elementArr;
 
 var pictures = [];
 
@@ -133,7 +134,6 @@ var sumLikes = similarPictureTemplate.querySelector('.picture__likes');
 var fragment = document.createDocumentFragment();
 
 var bigPicturesBlock = document.querySelector('.big-picture');
-var elementArr = Math.floor(Math.random() * pictures.length);
 
 var socialCommentsBlocks = bigPicturesBlock.querySelector('.social__comments');
 socialCommentsBlocks.innerHTML = '';
@@ -150,6 +150,7 @@ for (var i = 1; i <= SUM_PICTURES; i++) {
   addDescriptionAndRandomArrComments();
   addRandomComment();
   addPhotoObjects(i);
+  elementArr = Math.floor(Math.random() * pictures.length);
 }
 
 for (i = 0; i < SUM_PICTURES; i++) {
