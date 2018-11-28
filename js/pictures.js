@@ -2,19 +2,21 @@
 var MIN_PICTURE_LIKE = 15; // минимальное кол-во лайков
 var MAX_PICTURE_LIKE = 200; // максимальное кол-во лайков
 var SUM_PICTURES = 25; // Кол-во фотографий других пользователей
-var MAX_COMMENT = 15; // Максимальное кол-во комментов
+var MAX_COMMENT = 7; // Максимальное кол-во комментов
+
+function createsRandomNumber(min, max) {
+  return Math.floor(Math.random() * (max - min) + min);
+}
 
 /**
  * функция для генерации массива случайных комментариев
  * @function
  */
-function addRandomComment() {
-  for (var n = 0; n < randomNumber; n++) {
-    var commentRandom = Math.floor(Math.random() * comments.length);
-    var commentObject = ({
-      comment: comments[commentRandom]
+function createsRandomComments() {
+  for (var n = 0; n < createsRandomNumber(1, MAX_COMMENT); n++) {
+    commentsArr.push({
+      comment: comments[createsRandomNumber(0, comments.length)]
     });
-    commentsArr.push(commentObject);
   }
 }
 
@@ -23,16 +25,15 @@ function addRandomComment() {
  * @function
  * @param {number} numberPhoto порядковый номер элемента.
  */
-function addPhotoObjects(numberPhoto) {
-  var like = Math.floor(Math.random() * (MAX_PICTURE_LIKE - MIN_PICTURE_LIKE) + MIN_PICTURE_LIKE);
-  var object = ({
+function createsPhoto(numberPhoto) {
+  pictures.push({
     url: 'photos/' + numberPhoto + '.jpg',
-    likes: like,
+    likes: createsRandomNumber(MIN_PICTURE_LIKE, MAX_PICTURE_LIKE),
     comments: commentsArr,
-    description: descriptions[description]
+    description: descriptions[createsRandomNumber(0, descriptions.length)]
   });
-  pictures.push(object);
 }
+
 
 /**
  * Функция заполняет данные увеличеной фотографиию.
@@ -40,8 +41,7 @@ function addPhotoObjects(numberPhoto) {
  * @param {number} numComments элеммент массива pictures[].
  */
 function showBigPhotoWithComments(numComments) {
-  var avatar = Math.floor(Math.random() * 6) + 1;
-  imageSrcAvatar.setAttribute('src', 'img/avatar-' + avatar + '.svg');
+  imageSrcAvatar.setAttribute('src', 'img/avatar-' + createsRandomNumber(7, 1) + '.svg');
   socialText.textContent = pictures[elementArr].comments[numComments].comment;
   var socialTemplate = similarCommentTemplate.cloneNode(true);
   addFragmentToParent(fragmentForComments, socialTemplate);
@@ -58,16 +58,6 @@ function addDataToTemplate(arrElement) {
   sumLikes.textContent = pictures[arrElement].likes;
   var pictureTemplate = similarPictureTemplate.cloneNode(true);
   addFragmentToParent(fragment, pictureTemplate);
-}
-
-/**
- * функция создает массив случайных комментариев
- * @function
- */
-function addDescriptionAndRandomArrComments() {
-  description = Math.floor(Math.random() * descriptions.length);
-  commentsArr = [];
-  randomNumber = Math.floor(Math.random() * MAX_COMMENT) + 1;
 }
 
 /**
@@ -115,10 +105,9 @@ var descriptions = [
   'Вот это тачка!'
 ];
 
-var description;
-var commentsArr;
-var randomNumber;
+
 var elementArr;
+var commentsArr;
 
 var pictures = [];
 
@@ -147,10 +136,10 @@ var socialText = similarCommentTemplate.querySelector('.social__text');
 var fragmentForComments = document.createDocumentFragment();
 
 for (var i = 1; i <= SUM_PICTURES; i++) {
-  addDescriptionAndRandomArrComments();
-  addRandomComment();
-  addPhotoObjects(i);
-  elementArr = Math.floor(Math.random() * pictures.length);
+  commentsArr = [];
+  createsRandomComments();
+  createsPhoto(i);
+  elementArr = createsRandomNumber(0, pictures.length)
 }
 
 for (i = 0; i < SUM_PICTURES; i++) {
