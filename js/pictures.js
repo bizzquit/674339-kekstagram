@@ -34,7 +34,6 @@ function createsPhoto(numberPhoto) {
   });
 }
 
-
 /**
  * Функция заполняет данные увеличеной фотографиию.
  * @function
@@ -69,23 +68,6 @@ function addDataToTemplate(arrElement) {
 function addFragmentToParent(parent, element) {
   parent.appendChild(element);
 }
-
-/**
- * Функция добавляет элементы фотографии в разметку
- * @function
- */
-function addValuesToBigPhoto() {
-  bigPicturesBlock.querySelector('.big-picture__img img')
-    .setAttribute('src', pictures[elementArr].url);
-  bigPicturesBlock.querySelector('.likes-count')
-    .textContent = pictures[elementArr].likes;
-  bigPicturesBlock.querySelector('.social__caption')
-    .textContent = pictures[elementArr].description;
-  bigPicturesBlock.querySelector('.comments-count')
-    .textContent = pictures[elementArr]
-    .comments.length;
-}
-
 
 var comments = [
   'Всё отлично!',
@@ -149,7 +131,15 @@ addFragmentToParent(parentBlog, fragment);
 
 bigPicturesBlock.classList.remove('hidden');
 
-addValuesToBigPhoto();
+bigPicturesBlock.querySelector('.big-picture__img img')
+  .setAttribute('src', pictures[elementArr].url);
+bigPicturesBlock.querySelector('.likes-count')
+  .textContent = pictures[elementArr].likes;
+bigPicturesBlock.querySelector('.social__caption')
+  .textContent = pictures[elementArr].description;
+bigPicturesBlock.querySelector('.comments-count')
+  .textContent = pictures[elementArr]
+  .comments.length;
 
 document.querySelector('.social__comment-count').classList.add('visually-hidden');
 document.querySelector('.comments-loader').classList.add('visually-hidden');
