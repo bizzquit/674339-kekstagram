@@ -4,7 +4,14 @@ var MAX_PICTURE_LIKE = 200; // максимальное кол-во лайков
 var SUM_PICTURES = 25; // Кол-во фотографий других пользователей
 var MAX_COMMENT = 7; // Максимальное кол-во комментов
 
-function createsRandomNumber(min, max) {
+/**
+ * Функция создания рандомного числа от мин (или 0 если нет) до макс
+ * @param {number} max -Максимальное число.
+ * @param {number} min - Минимальное число
+ * @return {number}  Случайное число от мин-макс
+ */
+function createsRandomNumber(max, min) {
+  min = min || 0;
   return Math.floor(Math.random() * (max - min) + min);
 }
 
@@ -13,9 +20,9 @@ function createsRandomNumber(min, max) {
  * @function
  */
 function createsRandomComments() {
-  for (var n = 0; n < createsRandomNumber(1, MAX_COMMENT); n++) {
+  for (var n = 0; n < createsRandomNumber(MAX_COMMENT, 1); n++) {
     commentsArr.push({
-      comment: comments[createsRandomNumber(0, comments.length)]
+      comment: comments[createsRandomNumber(comments.length)]
     });
   }
 }
@@ -28,9 +35,9 @@ function createsRandomComments() {
 function createsPhoto(numberPhoto) {
   pictures.push({
     url: 'photos/' + numberPhoto + '.jpg',
-    likes: createsRandomNumber(MIN_PICTURE_LIKE, MAX_PICTURE_LIKE),
+    likes: createsRandomNumber(MAX_PICTURE_LIKE, MIN_PICTURE_LIKE),
     comments: commentsArr,
-    description: descriptions[createsRandomNumber(0, descriptions.length)]
+    description: descriptions[createsRandomNumber(descriptions.length)]
   });
 }
 
@@ -121,7 +128,7 @@ for (var i = 1; i <= SUM_PICTURES; i++) {
   commentsArr = [];
   createsRandomComments();
   createsPhoto(i);
-  elementArr = createsRandomNumber(0, pictures.length)
+  elementArr = createsRandomNumber(pictures.length);
 }
 
 for (i = 0; i < SUM_PICTURES; i++) {
