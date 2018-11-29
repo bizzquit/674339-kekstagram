@@ -4,6 +4,8 @@ var MAX_PICTURE_LIKE = 200; // максимальное кол-во лайков
 var SUM_PICTURES = 25; // Кол-во фотографий других пользователей
 var MAX_COMMENT = 7; // Максимальное кол-во комментов
 var ZOOM = 25;
+var MIN_ZOOM = 25;
+var MAX_ZOOM = 100;
 
 /**
  * Функция создания рандомного числа от мин (или 0 если нет) до макс
@@ -136,24 +138,23 @@ var photoZoomInPhoto = document.querySelector('.scale__control--bigger');
 var photoZoomOutPhoto = document.querySelector('.scale__control--smaller');
 var photoZoomControl = document.querySelector('.scale__control--value');
 
+var valueControl = parseFloat(photoZoomControl.value);
+var imageZoom = document.querySelector('.img-upload__preview');
+
 photoZoomInPhoto.addEventListener('click', function () {
-  var valueControl = parseFloat(photoZoomControl.value);
   valueControl = (valueControl + ZOOM);
-  if (valueControl > 100) {
-    valueControl = 100;
+  if (valueControl > MAX_ZOOM) {
+    valueControl = MAX_ZOOM;
   }
-  var imageZoom = document.querySelector('.img-upload__preview');
   imageZoom.style.transform = 'scale(' + valueControl / 100 + ')';
   photoZoomControl.value = valueControl + '%';
 });
 
 photoZoomOutPhoto.addEventListener('click', function () {
-  var valueControl = parseFloat(photoZoomControl.value);
   valueControl = (valueControl - ZOOM);
-  if (valueControl < 25) {
-    valueControl = 25;
+  if (valueControl < MIN_ZOOM) {
+    valueControl = MIN_ZOOM;
   }
-  var imageZoom = document.querySelector('.img-upload__preview');
   imageZoom.style.transform = 'scale(' + valueControl / 100 + ')';
   photoZoomControl.value = valueControl + '%';
 });
