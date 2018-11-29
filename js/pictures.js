@@ -3,6 +3,7 @@ var MIN_PICTURE_LIKE = 15; // минимальное кол-во лайков
 var MAX_PICTURE_LIKE = 200; // максимальное кол-во лайков
 var SUM_PICTURES = 25; // Кол-во фотографий других пользователей
 var MAX_COMMENT = 7; // Максимальное кол-во комментов
+var ZOOM = 25;
 
 /**
  * Функция создания рандомного числа от мин (или 0 если нет) до макс
@@ -45,10 +46,11 @@ function createsPhoto(numberPhoto) {
  * Функция заполняет данные увеличеной фотографиию.
  * @function
  * @param {number} numComments элеммент массива pictures[].
+ * @param {number} number Номер элемента в массиве
  */
-function showBigPhotoWithComments(numComments) {
+function showBigPhotoWithComments(numComments, number) {
   imageSrcAvatar.setAttribute('src', 'img/avatar-' + createsRandomNumber(7, 1) + '.svg');
-  socialText.textContent = pictures[elementArr].comments[numComments].comment;
+  socialText.textContent = pictures[number].comments[numComments].comment;
   var socialTemplate = similarCommentTemplate.cloneNode(true);
   addFragmentToParent(fragmentForComments, socialTemplate);
 }
@@ -76,6 +78,11 @@ function addFragmentToParent(parent, element) {
   parent.appendChild(element);
 }
 
+function addedNewPhoto() {
+  document.querySelector('.img-upload__overlay').classList.remove('hidden');
+  uploadFile.removeEventListener('change', addedNewPhoto);
+}
+
 var comments = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
@@ -95,7 +102,6 @@ var descriptions = [
 ];
 
 
-var elementArr;
 var commentsArr;
 
 var pictures = [];
@@ -124,11 +130,40 @@ var socialText = similarCommentTemplate.querySelector('.social__text');
 
 var fragmentForComments = document.createDocumentFragment();
 
+var uploadFile = document.querySelector('#upload-file');
+
+var photoZoomInPhoto = document.querySelector('.scale__control--bigger');
+var photoZoomOutPhoto = document.querySelector('.scale__control--smaller');
+var photoZoomControl = document.querySelector('.scale__control--value');
+
+photoZoomInPhoto.addEventListener('click', function () {
+  var valueControl = parseFloat(photoZoomControl.value);
+  valueControl = (valueControl + ZOOM);
+  if (valueControl > 100) {
+    valueControl = 100;
+  }
+  var imageZoom = document.querySelector('.img-upload__preview');
+  imageZoom.style.transform = 'scale(' + valueControl / 100 + ')';
+  photoZoomControl.value = valueControl + '%';
+});
+
+photoZoomOutPhoto.addEventListener('click', function () {
+  var valueControl = parseFloat(photoZoomControl.value);
+  valueControl = (valueControl - ZOOM);
+  if (valueControl < 25) {
+    valueControl = 25;
+  }
+  var imageZoom = document.querySelector('.img-upload__preview');
+  imageZoom.style.transform = 'scale(' + valueControl / 100 + ')';
+  photoZoomControl.value = valueControl + '%';
+});
+
+
 for (var i = 1; i <= SUM_PICTURES; i++) {
   commentsArr = [];
   createsRandomComments();
   createsPhoto(i);
-  elementArr = createsRandomNumber(pictures.length);
+  createsRandomNumber(pictures.length);
 }
 
 for (i = 0; i < SUM_PICTURES; i++) {
@@ -136,22 +171,31 @@ for (i = 0; i < SUM_PICTURES; i++) {
 }
 addFragmentToParent(parentBlog, fragment);
 
-bigPicturesBlock.classList.remove('hidden');
-
-bigPicturesBlock.querySelector('.big-picture__img img')
-  .setAttribute('src', pictures[elementArr].url);
-bigPicturesBlock.querySelector('.likes-count')
-  .textContent = pictures[elementArr].likes;
-bigPicturesBlock.querySelector('.social__caption')
-  .textContent = pictures[elementArr].description;
-bigPicturesBlock.querySelector('.comments-count')
-  .textContent = pictures[elementArr]
-  .comments.length;
-
 document.querySelector('.social__comment-count').classList.add('visually-hidden');
 document.querySelector('.comments-loader').classList.add('visually-hidden');
 
-for (var y = 0; y < pictures[elementArr].comments.length; y++) {
-  showBigPhotoWithComments(y);
-}
-addFragmentToParent(socialCommentsBlocks, fragmentForComments);
+parentBlog.querySelectorAll('.picture').forEach(function (element, numArr) {
+  element.addEventListener('click', function () {
+    bigPicturesBlock.classList.remove('hidden');
+    bigPicturesBlock.querySelector('.big-picture__img img')
+      .setAttribute('src', pictures[numArr].url);
+    bigPicturesBlock.querySelector('.likes-count')
+      .textContent = pictures[numArr].likes;
+    bigPicturesBlock.querySelector('.social__caption')
+      .textContent = pictures[numArr].description;
+    bigPicturesBlock.querySelector('.comments-count')
+      .textContent = pictures[numArr]
+      .comments.length;
+    for (var y = 0; y < pictures[numArr].comments.length; y++) {
+      showBigPhotoWithComments(y, numArr);
+    }
+    addFragmentToParent(socialCommentsBlocks, fragmentForComments);
+  });
+});
+
+document.querySelector('.big-picture__cancel').addEventListener('click', function () {
+  bigPicturesBlock.classList.add('hidden');
+});
+
+uploadFile.addEventListener('change', addedNewPhoto);
+
