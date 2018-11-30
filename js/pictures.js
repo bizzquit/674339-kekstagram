@@ -3,9 +3,9 @@ var MIN_PICTURE_LIKE = 15; // минимальное кол-во лайков
 var MAX_PICTURE_LIKE = 200; // максимальное кол-во лайков
 var SUM_PICTURES = 25; // Кол-во фотографий других пользователей
 var MAX_COMMENT = 7; // Максимальное кол-во комментов
-var ZOOM = 25;
-var MIN_ZOOM = 25;
-var MAX_ZOOM = 100;
+var ZOOM = 25; // Шаг зумирования
+var MIN_ZOOM = 25; // минимальное значение зума
+var MAX_ZOOM = 100; // максимальное значение зума
 
 /**
  * Функция создания рандомного числа от мин (или 0 если нет) до макс
@@ -80,10 +80,32 @@ function addFragmentToParent(parent, element) {
   parent.appendChild(element);
 }
 
+/**
+ * функция "псевдо" добавления нового фото срабатывает при 'change' #upload-file
+ * в конце удаляет обработчик
+ * @function
+ */
 function addedNewPhoto() {
   document.querySelector('.img-upload__overlay').classList.remove('hidden');
   uploadFile.removeEventListener('change', addedNewPhoto);
 }
+
+/**
+ * Функция управления InZoom, OutZoom с параметрами ограничения.
+ * @param {number} maxZoom Максимум (100%).
+ * @param {number} minZoom Минимум (25%).
+ */
+function zoomInOutPhoto(maxZoom, minZoom) {
+  if (valueControl > maxZoom) {
+    valueControl = maxZoom;
+  }
+  if (valueControl < minZoom) {
+    valueControl = minZoom;
+  }
+  imageZoom.style.transform = 'scale(' + valueControl / 100 + ')';
+  photoZoomControl.value = valueControl + '%';
+}
+
 
 var comments = [
   'Всё отлично!',
@@ -105,7 +127,6 @@ var descriptions = [
 
 
 var commentsArr;
-
 var pictures = [];
 
 var parentBlog = document.querySelector('.pictures');
@@ -140,25 +161,6 @@ var photoZoomControl = document.querySelector('.scale__control--value');
 
 var valueControl = parseFloat(photoZoomControl.value);
 var imageZoom = document.querySelector('.img-upload__preview');
-
-photoZoomInPhoto.addEventListener('click', function () {
-  valueControl = (valueControl + ZOOM);
-  if (valueControl > MAX_ZOOM) {
-    valueControl = MAX_ZOOM;
-  }
-  imageZoom.style.transform = 'scale(' + valueControl / 100 + ')';
-  photoZoomControl.value = valueControl + '%';
-});
-
-photoZoomOutPhoto.addEventListener('click', function () {
-  valueControl = (valueControl - ZOOM);
-  if (valueControl < MIN_ZOOM) {
-    valueControl = MIN_ZOOM;
-  }
-  imageZoom.style.transform = 'scale(' + valueControl / 100 + ')';
-  photoZoomControl.value = valueControl + '%';
-});
-
 
 for (var i = 1; i <= SUM_PICTURES; i++) {
   commentsArr = [];
@@ -199,4 +201,16 @@ document.querySelector('.big-picture__cancel').addEventListener('click', functio
 });
 
 uploadFile.addEventListener('change', addedNewPhoto);
+imageZoom.style.transform = 'scale(' + valueControl / 100 + ')';
+
+
+photoZoomInPhoto.addEventListener('click', function () {
+  valueControl = (valueControl + ZOOM);
+  zoomInOutPhoto(MAX_ZOOM, MIN_ZOOM);
+});
+
+photoZoomOutPhoto.addEventListener('click', function () {
+  valueControl = (valueControl - ZOOM);
+  zoomInOutPhoto(MAX_ZOOM, MIN_ZOOM);
+});
 
