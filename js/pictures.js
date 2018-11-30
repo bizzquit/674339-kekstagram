@@ -90,6 +90,10 @@ function addedNewPhoto() {
   uploadFile.removeEventListener('change', addedNewPhoto);
 }
 
+/**
+ * Функция закрытия окна добавление нового фото.
+ * @function
+ */
 function closesWindowNewPhoto() {
   document.querySelector('.img-upload__overlay').classList.add('hidden');
   uploadFile.removeEventListener('change', closesWindowNewPhoto);
@@ -112,7 +116,7 @@ function zoomInOutPhoto(maxZoom, minZoom) {
 }
 
 /**
- * Функция смены эффекта наложения на фото, 1) числим имеющийся класс, втыкаем новый.
+ * Функция смены эффекта наложения на фото, 1) чистим имеющийся класс, втыкаем новый.
  * @function
  */
 function changeEffect() {
@@ -120,8 +124,21 @@ function changeEffect() {
     .attributes.value.value;
   imagePreview.removeAttribute('class');
   imagePreview.classList.add('effects__preview--' + effectListPhoto);
-}
 
+  // Остановился тут класс отрабатывает, осталось добавить сброс при переключении и отловит onmouse
+
+  var result = (effectLevelPin.offsetLeft / effectLevelLine.offsetWidth).toFixed(2);
+  var effectsOnPhoto = {
+    'none': 'filter: none',
+    'chrome': 'filter: grayscale(' + 1 * result + ')',
+    'sepia': 'filter: sepia(' + 1 * result + ')',
+    'marvin': 'filter: invert(' + 100 * result + '%)',
+    'phobos': 'filter: blur(' + 3 * result + 'px)',
+    'heat': 'filter: brightness(' + 3 * result + ')'
+  };
+
+  imagePreview.style = effectsOnPhoto[effectListPhoto];
+}
 
 var comments = [
   'Всё отлично!',
@@ -140,7 +157,6 @@ var descriptions = [
   'Цените каждое мгновенье. Цените тех, кто рядом с вами и отгоняйте все сомненья. Не обижайте всех словами......',
   'Вот это тачка!'
 ];
-
 
 var commentsArr;
 var pictures = [];
@@ -182,6 +198,11 @@ var imageUpWindowClose = document.querySelector('.img-upload__cancel');
 var effectsListPhoto = document.querySelectorAll('input[name="effect"]');
 var imagePreview = document.querySelector('.img-upload__preview img');
 
+var effectLevelLine = document.querySelector('.effect-level__line');
+var effectLevelPin = document.querySelector('.effect-level__pin');
+/**/
+
+/**/
 for (var i = 1; i <= SUM_PICTURES; i++) {
   commentsArr = [];
   createsRandomComments();
