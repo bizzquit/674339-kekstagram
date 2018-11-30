@@ -90,6 +90,11 @@ function addedNewPhoto() {
   uploadFile.removeEventListener('change', addedNewPhoto);
 }
 
+function closesWindowNewPhoto() {
+  document.querySelector('.img-upload__overlay').classList.add('hidden');
+  uploadFile.removeEventListener('change', closesWindowNewPhoto);
+}
+
 /**
  * Функция управления InZoom, OutZoom с параметрами ограничения.
  * @param {number} maxZoom Максимум (100%).
@@ -104,6 +109,17 @@ function zoomInOutPhoto(maxZoom, minZoom) {
   }
   imageZoom.style.transform = 'scale(' + valueControl / 100 + ')';
   photoZoomControl.value = valueControl + '%';
+}
+
+/**
+ * Функция смены эффекта наложения на фото, 1) числим имеющийся класс, втыкаем новый.
+ * @function
+ */
+function changeEffect() {
+  var effectListPhoto = document.querySelector('input[name="effect"]:checked')
+    .attributes.value.value;
+  imagePreview.removeAttribute('class');
+  imagePreview.classList.add('effects__preview--' + effectListPhoto);
 }
 
 
@@ -161,6 +177,10 @@ var photoZoomControl = document.querySelector('.scale__control--value');
 
 var valueControl = parseFloat(photoZoomControl.value);
 var imageZoom = document.querySelector('.img-upload__preview');
+var imageUpWindowClose = document.querySelector('.img-upload__cancel');
+
+var effectsListPhoto = document.querySelectorAll('input[name="effect"]');
+var imagePreview = document.querySelector('.img-upload__preview img');
 
 for (var i = 1; i <= SUM_PICTURES; i++) {
   commentsArr = [];
@@ -201,6 +221,7 @@ document.querySelector('.big-picture__cancel').addEventListener('click', functio
 });
 
 uploadFile.addEventListener('change', addedNewPhoto);
+imageUpWindowClose.addEventListener('click', closesWindowNewPhoto);
 imageZoom.style.transform = 'scale(' + valueControl / 100 + ')';
 
 
@@ -214,3 +235,6 @@ photoZoomOutPhoto.addEventListener('click', function () {
   zoomInOutPhoto(MAX_ZOOM, MIN_ZOOM);
 });
 
+effectsListPhoto.forEach(function (element) {
+  element.addEventListener('click', changeEffect);
+});
