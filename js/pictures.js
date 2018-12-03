@@ -99,6 +99,7 @@
   function closesWindowNewPhoto() {
     document.querySelector('.img-upload__overlay').classList.add('hidden');
     uploadFile.removeEventListener('change', closesWindowNewPhoto);
+    uploadFile.removeEventListener('change', addedNewPhoto);
   }
 
   /**
@@ -129,6 +130,10 @@
     imagePreview.style.filter = '';
   }
 
+  /**
+   * Функция изменения интенсивности наложения эффекта на фото (Scrolling)
+   * @function
+   */
   function changeEffectScroll() {
     var effectListPhoto = document.querySelector('input[name="effect"]:checked')
       .attributes.value.value;
@@ -279,7 +284,6 @@
 
       var minShiftX = effectLevelLine.getBoundingClientRect().left;
       var maxShiftX = effectLevelLine.getBoundingClientRect().right;
-
       effectLevelPin.style.left = (effectLevelPin.offsetLeft - shift.x) + 'px';
       if (effectLevelPin.getBoundingClientRect().left < minShiftX - 9) {
         effectLevelPin.style.left = 0 + 'px';
@@ -287,7 +291,6 @@
       if (effectLevelPin.getBoundingClientRect().left > maxShiftX - 9) {
         effectLevelPin.style.left = effectLevelLine.offsetWidth + 'px';
       }
-
       effectLevelLine.querySelector('.effect-level__depth')
         .style.width = (effectLevelPin.offsetLeft / effectLevelLine.offsetWidth)
         .toFixed(2) * 100 + '%';
