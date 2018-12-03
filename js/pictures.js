@@ -264,16 +264,16 @@
 
   effectLevelPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
-    var startCoords = {
+    var startCoordinates = {
       x: evt.clientX,
     };
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
       var shift = {
-        x: startCoords.x - moveEvt.clientX,
+        x: startCoordinates.x - moveEvt.clientX,
       };
 
-      startCoords = {
+      startCoordinates = {
         x: moveEvt.clientX,
       };
 
