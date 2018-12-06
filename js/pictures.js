@@ -8,6 +8,8 @@
   var ZOOM = 25; // Шаг зумирования
   var MIN_ZOOM = 25; // минимальное значение зума
   var MAX_ZOOM = 100; // максимальное значение зума
+  var MAX_HASHTAGS = 5;
+  var MAX_LENGTH_HASHTAG = 25;
 
   /**
    * Функция создания рандомного числа от мин (или 0 если нет) до макс
@@ -210,6 +212,8 @@
   var effectLevelLine = document.querySelector('.effect-level__line');
   var effectLevelPin = document.querySelector('.effect-level__pin');
 
+  var inputHashTags = document.querySelector('.text__hashtags');
+
   for (var i = 1; i <= SUM_PICTURES; i++) {
     commentsArr = [];
     createsRandomComments();
@@ -305,6 +309,42 @@
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
+  });
+
+
+  var validations = function (arr) {
+    arr.forEach(function (elem, num) {
+      var lengthHash = arr[num].length;
+      var firstSymbol = arr[num].charAt(0);
+      if (firstSymbol !== '#') {
+        inputHashTags.setCustomValidity('Хэштег ДОЛЖЕН начинается со знака "#"');
+        return;
+      }
+      if (lengthHash > MAX_LENGTH_HASHTAG) {
+        inputHashTags.setCustomValidity('Введено больше 25 символов для 1-го Хэштэга');
+        return;
+      }
+      if (arr.length > MAX_HASHTAGS) {
+        inputHashTags.setCustomValidity('Введено больше 5 ХЭШТЭГОВ');
+      } else {
+        inputHashTags.setCustomValidity('');
+
+      }
+
+    });
+  };
+
+  inputHashTags.addEventListener('input', function (evt) {
+    var target = evt.target;
+    var value = target.value.trim().toLowerCase();
+    var elementsHashTags = value.split(' ');
+    validations(elementsHashTags);
+  });
+  inputHashTags.addEventListener('change', function (evt) {
+    var target = evt.target;
+    var value = target.value.trim().toLowerCase();
+    var elementsHashTags2 = value.split(' ');
+    console.log(elementsHashTags2);
   });
 
 })();
