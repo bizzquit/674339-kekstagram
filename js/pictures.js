@@ -328,6 +328,12 @@
     arr.forEach(function (elem, num) {
       var lengthHash = arr[num].length;
       var firstSymbol = arr[num][0];
+      for (var y = 1; y < arr[num].length; y++) {
+        if (arr[num][y] === '#') {
+          inputHashTags.setCustomValidity('Хэштеги должны разделяться пробелом');
+          return;
+        }
+      }
       if (arr.length > 1) {
         for (num = 0; num < arr.length; num++) {
           for (i = num + 1; i < arr.length; i++) {
