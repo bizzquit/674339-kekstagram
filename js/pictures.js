@@ -334,6 +334,14 @@
           return;
         }
       }
+      if (firstSymbol !== '#') {
+        inputHashTags.setCustomValidity('Хэштег ДОЛЖЕН начинается со знака "#"');
+        return;
+      }
+      if (lengthHash === 1) {
+        inputHashTags.setCustomValidity('Хэштег ДОЛЖЕН БЫТЬ больше 1 знака');
+        return;
+      }
       if (arr.length > 1) {
         for (num = 0; num < arr.length; num++) {
           for (i = num + 1; i < arr.length; i++) {
@@ -343,14 +351,6 @@
             }
           }
         }
-      }
-      if (firstSymbol !== '#') {
-        inputHashTags.setCustomValidity('Хэштег ДОЛЖЕН начинается со знака "#"');
-        return;
-      }
-      if (lengthHash === 1) {
-        inputHashTags.setCustomValidity('Хэштег ДОЛЖЕН БЫТЬ больше 1 знака');
-        return;
       }
       if (lengthHash > MAX_LENGTH_HASHTAG) {
         inputHashTags.setCustomValidity('Введено больше 25 символов для 1-го Хэштэга');
@@ -364,28 +364,20 @@
     });
   };
 
-  inputHashTags.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.KeyCode.SPACE) {
-      var elementsHashTags = evt.target.value.trim().toLowerCase().split(' ');
-      validations(elementsHashTags);
-    }
-    inputHashTags.addEventListener('change', function () {
-      var elementsHashTags2 = evt.target.value.trim().toLowerCase().split(' ');
-      validations(elementsHashTags2);
-    });
+  inputHashTags.addEventListener('input', function (evt) {
+    var elementsHashTags = evt.target.value.trim().toLowerCase().split(' ');
+    validations(elementsHashTags);
+
   });
 
 
   textDescription.addEventListener('change', function (evt) {
     var lengthDescription = evt.target.value.length;
-    if (lengthDescription) {
-      if (lengthDescription < 2) {
-        textDescription.setCustomValidity('Комментарий не может быть меньше 2-х символов');
-        return;
-      }
-      if (lengthDescription > 140) {
-        textDescription.setCustomValidity('Комментарий не может быть больше 140 символов - сейчас у ВАС ' + lengthDescription + ' символ(а)(ов)');
-      }
+    if (lengthDescription > 0 && lengthDescription < 2) {
+      textDescription.setCustomValidity('Комментарий не может быть меньше 2-х символов');
+    }
+    if (lengthDescription > 140) {
+      textDescription.setCustomValidity('Комментарий не может быть больше 140 символов - сейчас у ВАС ' + lengthDescription + ' символ(а)(ов)');
     } else {
       textDescription.setCustomValidity('');
     }
