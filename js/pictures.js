@@ -300,11 +300,12 @@
 
       var minShiftX = effectLevelLine.getBoundingClientRect().left;
       var maxShiftX = effectLevelLine.getBoundingClientRect().right;
+      var widthPin = parseFloat(getComputedStyle(effectLevelPin).width);
       effectLevelPin.style.left = (effectLevelPin.offsetLeft - shift.x) + 'px';
-      if (effectLevelPin.getBoundingClientRect().left < minShiftX - 9) {
+      if (effectLevelPin.getBoundingClientRect().left < minShiftX - (widthPin / 2)) {
         effectLevelPin.style.left = 0 + 'px';
       }
-      if (effectLevelPin.getBoundingClientRect().left > maxShiftX - 9) {
+      if (effectLevelPin.getBoundingClientRect().left > maxShiftX - (widthPin / 2)) {
         effectLevelPin.style.left = effectLevelLine.offsetWidth + 'px';
       }
       effectLevelLine.querySelector('.effect-level__depth')
