@@ -261,14 +261,13 @@
 
   uploadFile.addEventListener('change', addedNewPhoto);
   imageZoom.style.transform = 'scale(' + valueControl / 100 + ')';
-
   imageUpWindowClose.addEventListener('click', closesWindowNewPhoto);
-  var onPressKeyEsc = function (evt) {
+
+  document.addEventListener('keydown', function (evt) {
     if (evt.keyCode === window.KeyCode.ESC && document.activeElement !== textDescription && document.activeElement !== inputHashTags) {
       closesWindowNewPhoto();
     }
-  };
-  document.addEventListener('keydown', onPressKeyEsc);
+  });
 
   photoZoomInPhoto.addEventListener('click', function () {
     valueControl = (valueControl + ZOOM);
@@ -325,27 +324,27 @@
   });
 
   var validations = function (arr) {
-    arr.forEach(function (elem, num) {
-      var lengthHash = arr[num].length;
-      var firstSymbol = arr[num][0];
-      for (var y = 1; y < arr[num].length; y++) {
-        if (arr[num][y] === '#') {
-          inputHashTags.setCustomValidity('Хэштеги должны разделяться пробелом');
-          return;
-        }
+    arr.forEach(function (elem) {
+      var lengthHash = elem.length;
+      var firstSymbol = elem[0];
+      if (elem.indexOf('#', 2) !== -1) {
+        inputHashTags.setCustomValidity('Хэштеги должны разделяться пробелом');
+        return;
       }
       if (firstSymbol !== '#') {
         inputHashTags.setCustomValidity('Хэштег ДОЛЖЕН начинается со знака "#"');
         return;
       }
       if (lengthHash === 1) {
-        inputHashTags.setCustomValidity('Хэштег ДОЛЖЕН БЫТЬ больше 1 знака');
+        setTimeout(function () {
+          inputHashTags.setCustomValidity('Хэштег ДОЛЖЕН БЫТЬ больше 1 знака');
+        }, 3000);
         return;
       }
       if (arr.length > 1) {
-        for (num = 0; num < arr.length; num++) {
-          for (i = num + 1; i < arr.length; i++) {
-            if (arr[i] === arr[num]) {
+        for (elem = 0; elem < arr.length; elem++) {
+          for (i = elem + 1; i < arr.length; i++) {
+            if (arr[i] === arr[elem]) {
               inputHashTags.setCustomValidity('2-а ОДИНАКОВЫХ Хэштега - НЕЛЬЗЯ');
               return;
             }
@@ -375,8 +374,7 @@
     var lengthDescription = evt.target.value.length;
     if (lengthDescription > 0 && lengthDescription < 2) {
       textDescription.setCustomValidity('Комментарий не может быть меньше 2-х символов');
-    }
-    if (lengthDescription > 140) {
+    } else if (lengthDescription > 140) {
       textDescription.setCustomValidity('Комментарий не может быть больше 140 символов - сейчас у ВАС ' + lengthDescription + ' символ(а)(ов)');
     } else {
       textDescription.setCustomValidity('');
