@@ -338,8 +338,8 @@
       } else if (arr.length > 1) {
         for (i = 0; i < arr.length; i++) {
           var hashtag = arr[i];
-          var hashPrevious = arr.slice(0, i);
-          if (hashPrevious.indexOf(hashtag) > -1) {
+          var hashtagPrevious = arr.slice(0, i);
+          if (hashtagPrevious.indexOf(hashtag) > -1) {
             errorInputHash = '2-а одинаковых хэштега - НЕЛЬЗЯ';
           }
         }
