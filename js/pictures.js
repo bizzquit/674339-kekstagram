@@ -1,5 +1,10 @@
 'use strict';
 (function () {
+  window.KeyCode = {
+    ESC: 27,
+    ENTER: 13,
+    SPACE: 32
+  };
 
   var MIN_PICTURE_LIKE = 15; // минимальное кол-во лайков
   var MAX_PICTURE_LIKE = 200; // максимальное кол-во лайков
@@ -8,6 +13,8 @@
   var ZOOM = 25; // Шаг зумирования
   var MIN_ZOOM = 25; // минимальное значение зума
   var MAX_ZOOM = 100; // максимальное значение зума
+  var MAX_HASHTAGS = 5;
+  var MAX_LENGTH_HASHTAG = 25;
 
   /**
    * Функция создания рандомного числа от мин (или 0 если нет) до макс
@@ -210,6 +217,10 @@
   var effectLevelLine = document.querySelector('.effect-level__line');
   var effectLevelPin = document.querySelector('.effect-level__pin');
 
+  var inputHashTags = document.querySelector('.text__hashtags');
+
+  var textDescription = document.querySelector('.text__description');
+
   for (var i = 1; i <= SUM_PICTURES; i++) {
     commentsArr = [];
     createsRandomComments();
@@ -249,9 +260,14 @@
   });
 
   uploadFile.addEventListener('change', addedNewPhoto);
-  imageUpWindowClose.addEventListener('click', closesWindowNewPhoto);
   imageZoom.style.transform = 'scale(' + valueControl / 100 + ')';
+  imageUpWindowClose.addEventListener('click', closesWindowNewPhoto);
 
+  document.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === window.KeyCode.ESC && document.activeElement !== textDescription && document.activeElement !== inputHashTags) {
+      closesWindowNewPhoto();
+    }
+  });
 
   photoZoomInPhoto.addEventListener('click', function () {
     valueControl = (valueControl + ZOOM);
@@ -284,11 +300,12 @@
 
       var minShiftX = effectLevelLine.getBoundingClientRect().left;
       var maxShiftX = effectLevelLine.getBoundingClientRect().right;
+      var widthPin = parseFloat(getComputedStyle(effectLevelPin).width);
       effectLevelPin.style.left = (effectLevelPin.offsetLeft - shift.x) + 'px';
-      if (effectLevelPin.getBoundingClientRect().left < minShiftX - 9) {
+      if (effectLevelPin.getBoundingClientRect().left < minShiftX - (widthPin / 2)) {
         effectLevelPin.style.left = 0 + 'px';
       }
-      if (effectLevelPin.getBoundingClientRect().left > maxShiftX - 9) {
+      if (effectLevelPin.getBoundingClientRect().left > maxShiftX - (widthPin / 2)) {
         effectLevelPin.style.left = effectLevelLine.offsetWidth + 'px';
       }
       effectLevelLine.querySelector('.effect-level__depth')
@@ -305,6 +322,52 @@
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
+  });
+
+  var validations = function (arr) {
+    arr.forEach(function (elem) {
+      var lengthHash = elem.length;
+      var firstSymbol = elem[0];
+      var errorInputHash = '';
+      if (elem.indexOf('#', 2) !== -1) {
+        errorInputHash = 'Хэштеги должны разделяться пробелом';
+      } else if (firstSymbol !== '#') {
+        errorInputHash = 'Хэштег должен начинается со знака "#"';
+      } else if (lengthHash === 1) {
+        errorInputHash = 'Хэштег должен быть больше 1 знака';
+      } else if (arr.length > 1) {
+        for (i = 0; i < arr.length; i++) {
+          var hashtag = arr[i];
+          var hashtagPrevious = arr.slice(0, i);
+          if (hashtagPrevious.indexOf(hashtag) > -1) {
+            errorInputHash = '2-а одинаковых хэштега - НЕЛЬЗЯ';
+          }
+        }
+      } else if (lengthHash > MAX_LENGTH_HASHTAG) {
+        errorInputHash = 'Введено больше 25 символов для 1-го Хэштэга';
+      } else if (arr.length > MAX_HASHTAGS) {
+        errorInputHash = 'Введено больше 5 ХЭШТЭГОВ';
+      }
+      inputHashTags.setCustomValidity(errorInputHash);
+    });
+  };
+
+  inputHashTags.addEventListener('input', function (evt) {
+    var elementsHashTags = evt.target.value.trim().toLowerCase().split(' ');
+    validations(elementsHashTags);
+
+  });
+
+
+  textDescription.addEventListener('change', function (evt) {
+    var lengthDescription = evt.target.value.length;
+    if (lengthDescription > 0 && lengthDescription < 2) {
+      textDescription.setCustomValidity('Комментарий не может быть меньше 2-х символов');
+    } else if (lengthDescription > 140) {
+      textDescription.setCustomValidity('Комментарий не может быть больше 140 символов - сейчас у ВАС ' + lengthDescription + ' символ(а)(ов)');
+    } else {
+      textDescription.setCustomValidity('');
+    }
   });
 
 })();
