@@ -328,39 +328,27 @@
     arr.forEach(function (elem) {
       var lengthHash = elem.length;
       var firstSymbol = elem[0];
+      var errorInputHash = '';
       if (elem.indexOf('#', 2) !== -1) {
-        inputHashTags.setCustomValidity('Хэштеги должны разделяться пробелом');
-        return;
-      }
-      if (firstSymbol !== '#') {
-        inputHashTags.setCustomValidity('Хэштег ДОЛЖЕН начинается со знака "#"');
-        return;
-      }
-      if (lengthHash === 1) {
-        setTimeout(function () {
-          inputHashTags.setCustomValidity('Хэштег ДОЛЖЕН БЫТЬ больше 1 знака');
-        }, 3000);
-        return;
-      }
-      if (arr.length > 1) {
-        for (elem = 0; elem < arr.length; elem++) {
-          for (i = elem + 1; i < arr.length; i++) {
-            if (arr[i] === arr[elem]) {
-              inputHashTags.setCustomValidity('2-а ОДИНАКОВЫХ Хэштега - НЕЛЬЗЯ');
-              return;
-            }
+        errorInputHash = 'Хэштеги должны разделяться пробелом';
+      } else if (firstSymbol !== '#') {
+        errorInputHash = 'Хэштег должен начинается со знака "#"';
+      } else if (lengthHash === 1) {
+        errorInputHash = 'Хэштег должен быть больше 1 знака';
+      } else if (arr.length > 1) {
+        for (i = 0; i < arr.length; i++) {
+          var hashtag = arr[i];
+          var hashPrevious = arr.slice(0, i);
+          if (hashPrevious.indexOf(hashtag) > -1) {
+            errorInputHash = '2-а одинаковых хэштега - НЕЛЬЗЯ';
           }
         }
+      } else if (lengthHash > MAX_LENGTH_HASHTAG) {
+        errorInputHash = 'Введено больше 25 символов для 1-го Хэштэга';
+      } else if (arr.length > MAX_HASHTAGS) {
+        errorInputHash = 'Введено больше 5 ХЭШТЭГОВ';
       }
-      if (lengthHash > MAX_LENGTH_HASHTAG) {
-        inputHashTags.setCustomValidity('Введено больше 25 символов для 1-го Хэштэга');
-        return;
-      }
-      if (arr.length > MAX_HASHTAGS) {
-        inputHashTags.setCustomValidity('Введено больше 5 ХЭШТЭГОВ');
-      } else {
-        inputHashTags.setCustomValidity('');
-      }
+      inputHashTags.setCustomValidity(errorInputHash);
     });
   };
 
