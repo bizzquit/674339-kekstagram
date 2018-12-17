@@ -291,10 +291,11 @@
 
   effectLevelLine.addEventListener('mousedown', function (evt) {
     if (evt.target.className === 'effect-level__line' || evt.target.className === 'effect-level__depth') {
-      effectLevelPin.style.left = evt.layerX + 'px';
+      effectLevelPin.style.left = evt.offsetX + 'px';
       changeEffectScroll();
       changeEffectLineDepth();
-    } else if (evt.target.className === 'effect-level__pin') {
+    }
+    if (evt.target.className === 'effect-level__pin') {
       evt.preventDefault();
       var startCoordinates = {
         x: evt.clientX,
