@@ -301,7 +301,6 @@
       var shift = {
         x: startCoordinates.x - moveEvt.clientX,
       };
-
       startCoordinates = {
         x: moveEvt.clientX,
       };
