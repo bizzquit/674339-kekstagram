@@ -216,13 +216,12 @@
 
   var effectLevelLine = document.querySelector('.effect-level__line');
   var effectLevelPin = document.querySelector('.effect-level__pin');
-  var effectLevelDepth = document.querySelector('.effect-level__depth');
 
   var inputHashTags = document.querySelector('.text__hashtags');
 
   var textDescription = document.querySelector('.text__description');
 
-  var changeEffectLineDepth = function() {
+  var changeEffectLineDepth = function () {
     effectLevelLine.querySelector('.effect-level__depth')
       .style.width = (effectLevelPin.offsetLeft / effectLevelLine.offsetWidth)
       .toFixed(2) * 100 + '%';
