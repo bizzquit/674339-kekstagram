@@ -8,6 +8,12 @@
     inputHashTags: inputHashTags
   };
 
+  var KeyCode = {
+    ESC: 27,
+    ENTER: 13,
+    SPACE: 32
+  };
+
   /**
    * функция "псевдо" добавления нового фото срабатывает при 'change' #upload-file
    * в конце удаляет обработчик
@@ -35,7 +41,7 @@
   imageUpWindowClose.addEventListener('click', closesWindowNewPhoto);
 
   document.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === window.KeyCode.ESC && document.activeElement !== textDescription && document.activeElement !== inputHashTags) {
+    if (evt.keyCode === KeyCode.ESC && document.activeElement !== textDescription && document.activeElement !== inputHashTags) {
       closesWindowNewPhoto();
     }
   });
