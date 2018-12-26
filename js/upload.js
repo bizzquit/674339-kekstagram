@@ -3,35 +3,34 @@
   var textDescription = document.querySelector('.text__description');
   var inputHashTags = document.querySelector('.text__hashtags');
 
-  window.upload = {
-    textDescription: textDescription,
-    inputHashTags: inputHashTags
+  /**
+   * Функция закрытия окна добавление нового фото.
+   * @function
+   */
+  var closesWindowNewPhoto = function () {
+    window.backend.form.reset();
+    document.querySelector('.img-upload__overlay').classList.add('hidden');
+    uploadFile.removeEventListener('change', closesWindowNewPhoto);
   };
 
-  var KeyCode = {
-    ESC: 27,
-    ENTER: 13,
-    SPACE: 32
+  window.upload = {
+    textDescription: textDescription,
+    inputHashTags: inputHashTags,
+    closesWindowNewPhoto: closesWindowNewPhoto,
+    keyCode: {
+      ESC: 27,
+      ENTER: 13,
+      SPACE: 32
+    }
   };
 
   /**
-   * функция "псевдо" добавления нового фото срабатывает при 'change' #upload-file
+   * функция добавления нового фото срабатывает при 'change' #upload-file
    * в конце удаляет обработчик
    * @function
    */
   function addedNewPhoto() {
     document.querySelector('.img-upload__overlay').classList.remove('hidden');
-    uploadFile.removeEventListener('change', addedNewPhoto);
-  }
-
-  /**
-   * Функция закрытия окна добавление нового фото.
-   * @function
-   */
-  function closesWindowNewPhoto() {
-    document.querySelector('.img-upload__overlay').classList.add('hidden');
-    uploadFile.removeEventListener('change', closesWindowNewPhoto);
-    uploadFile.removeEventListener('change', addedNewPhoto);
   }
 
   var uploadFile = document.querySelector('#upload-file');
@@ -41,10 +40,9 @@
   imageUpWindowClose.addEventListener('click', closesWindowNewPhoto);
 
   document.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === KeyCode.ESC && document.activeElement !== textDescription && document.activeElement !== inputHashTags) {
+    if (evt.keyCode === window.upload.keyCode.ESC && document.activeElement !== textDescription && document.activeElement !== inputHashTags) {
       closesWindowNewPhoto();
     }
   });
-
 
 })();
