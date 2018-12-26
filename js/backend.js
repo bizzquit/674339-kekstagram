@@ -37,7 +37,7 @@
     window.backend.sending(new FormData(form), function () {
       form.reset();
       window.upload.closesWindowNewPhoto();
-      /* document.querySelector('.img-upload__label').style.display = 'none'; /* позже раскоменчу - убирает логотип загрузки */
+      document.querySelector('.img-upload__label').style.display = 'none';
       window.pictures.showPopUpSuccess();
     },
     function () {
