@@ -4,6 +4,7 @@
   var URL_LOAD = 'https://js.dump.academy/kekstagram/data';
   var URL_SEND = 'https://js.dump.academy/kekstagram';
   var form = document.querySelector('#upload-select-image');
+  var filtersContainer = document.querySelector('.img-filters');
 
   window.backend = {
     loading: function (onLoad, onError) {
@@ -16,7 +17,8 @@
       sendDataForm.open('POST', URL_SEND);
       sendDataForm.send(data);
     },
-    form: form
+    form: form,
+    filtersContainer: filtersContainer
   };
 
   var createsRequestJson = function (onLoad, onError) {
@@ -25,6 +27,7 @@
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
         onLoad(xhr.response);
+        filtersContainer.classList.remove('img-filters--inactive');
       } else {
         onError('Что-то пошло не так :(  Код ошибки = ' + xhr.status + ' : ' + xhr.statusText);
       }
