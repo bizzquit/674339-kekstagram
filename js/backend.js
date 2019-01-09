@@ -33,6 +33,7 @@
       }
     });
     return xhr;
+
   };
 
   form.addEventListener('submit', function (evt) {

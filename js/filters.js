@@ -14,12 +14,33 @@
     evt.target.classList.add('img-filters__button--active');
   };
 
-  filterPopularButton.addEventListener('click', activatedButtonFilter);
-  filterNewButton.addEventListener('click', activatedButtonFilter);
+  filterPopularButton.addEventListener('click', function (event) {
+    activatedButtonFilter(event);
+    window.pictures.createdPhotos(window.originData);
+  });
+  filterNewButton.addEventListener('click', function (event) {
+    activatedButtonFilter(event);
+    var photosNew = [];
+    var randomNum = [];
+    var i = 0;
+    while (i < 10) {
+      var y = Math.floor(Math.random() * (window.originData.length));
+      var ranNumPrevious = randomNum.slice(0, i);
+      if (ranNumPrevious.indexOf(y) === -1) {
+        randomNum.push(y);
+        i++;
+      }
+    }
+    for (var j = 0; j < randomNum.length; j++) {
+      var x = randomNum[j];
+      photosNew.push(window.originData[x]);
+    }
+    window.pictures.createdPhotos(photosNew);
+  });
 
   filterDiscussedButton.addEventListener('click', function (event) {
     activatedButtonFilter(event);
-    window.pictures.sortingList();
+    window.pictures.sortingListDiscus();
   });
 
 })();

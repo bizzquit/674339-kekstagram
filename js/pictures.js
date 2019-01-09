@@ -39,31 +39,28 @@
     for (var i = 0; i < allPhotos.length; i++) {
       parentBlog.removeChild(allPhotos[i]);
     }
-    console.log('Удалил  ' + pictures.length + '  Элементов');
-    /*createdPhotos(pictures);*/
   };
 
-  var createdPhotos = function (pictures) {
-    console.log(pictures);
-    for (var i = 0; i < pictures.length; i++) {
+  var createdPhotos = function (photos) {
+    data = photos;
+    for (var i = 0; i < photos.length; i++) {
       addDataToTemplate(i);
     }
     addFragmentToParent(parentBlog, fragment);
-
     parentBlog.querySelectorAll('.picture').forEach(function (element, numArr) {
       element.addEventListener('click', function () {
         bigPicturesBlock.classList.remove('hidden');
         bigPicturesBlock.querySelector('.big-picture__img img')
-          .setAttribute('src', pictures[numArr].url);
+          .setAttribute('src', photos[numArr].url);
         bigPicturesBlock.querySelector('.likes-count')
-          .textContent = pictures[numArr].likes;
+          .textContent = photos[numArr].likes;
         bigPicturesBlock.querySelector('.social__caption')
-          .textContent = pictures[numArr].description;
+          .textContent = photos[numArr].description;
         bigPicturesBlock.querySelector('.comments-count')
-          .textContent = pictures[numArr]
+          .textContent = photos[numArr]
           .comments.length;
 
-        for (var y = 0; y < pictures[numArr].comments.length; y++) {
+        for (var y = 0; y < photos[numArr].comments.length; y++) {
           showBigPhotoWithComments(y, numArr);
           document.body.classList.add('modal-open');
         }
@@ -72,9 +69,9 @@
     });
   };
 
-  var sortingList = function () {
-    var picturesCopy = pictures.slice();
-    pictures.sort(function (first, second) {
+  var sortingListDiscus = function () {
+    data = window.originData.slice();
+    data.sort(function (first, second) {
       if (first.comments.length > second.comments.length) {
         return -1;
       } else if (first.comments.length < second.comments.length) {
@@ -83,14 +80,16 @@
         return 0;
       }
     });
-    createdPhotos(pictures);
+    createdPhotos(data);
   };
+
 
   window.pictures = {
     showPopUpSuccess: showPopUpSuccess,
     showPopUpError: showPopUpError,
     deletingPhotos: deletingPhotos,
-    sortingList: sortingList
+    sortingListDiscus: sortingListDiscus,
+    createdPhotos: createdPhotos
   };
 
   /**
@@ -101,14 +100,15 @@
    */
   function successHandler(arrayJson) {
     for (var i = 0; i < arrayJson.length; i++) {
-      pictures.push({
+      data.push({
         url: arrayJson[i].url,
         likes: arrayJson[i].likes,
         comments: arrayJson[i].comments,
         description: arrayJson[i].description
       });
     }
-    createdPhotos(arrayJson);
+    createdPhotos(data);
+    window.originData = data.slice();
   }
 
   var errorHandler = function (errorJson) {
@@ -133,8 +133,8 @@
    * @param {number} number Номер элемента в массиве
    */
   function showBigPhotoWithComments(numComments, number) {
-    imageSrcAvatar.setAttribute('src', pictures[number].comments[numComments].avatar);
-    socialText.textContent = pictures[number].comments[numComments].message;
+    imageSrcAvatar.setAttribute('src', data[number].comments[numComments].avatar);
+    socialText.textContent = data[number].comments[numComments].message;
     var socialTemplate = similarCommentTemplate.cloneNode(true);
     addFragmentToParent(fragmentForComments, socialTemplate);
   }
@@ -145,9 +145,9 @@
    * @param {number} arrElement элемент массива pictures[].
    */
   function addDataToTemplate(arrElement) {
-    imageSrc.setAttribute('src', pictures[arrElement].url);
-    commentText.textContent = pictures[arrElement].comments.length;
-    sumLikes.textContent = pictures[arrElement].likes;
+    imageSrc.setAttribute('src', data[arrElement].url);
+    commentText.textContent = data[arrElement].comments.length;
+    sumLikes.textContent = data[arrElement].likes;
     var pictureTemplate = similarPictureTemplate.cloneNode(true);
     addFragmentToParent(fragment, pictureTemplate);
   }
@@ -170,7 +170,7 @@
       .content
       .querySelector('.error');
 
-  var pictures = [];
+  var data = [];
   var parentBlog = document.querySelector('.pictures');
   var similarPictureTemplate = document.querySelector('#picture')
     .content
@@ -195,6 +195,7 @@
   document.querySelector('.big-picture__cancel').addEventListener('click', function () {
     bigPicturesBlock.classList.add('hidden');
     document.body.classList.remove('modal-open');
+    socialCommentsBlocks.innerHTML = '';
   });
   window.backend.loading(successHandler, errorHandler);
 })();
