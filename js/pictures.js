@@ -207,11 +207,8 @@
   var imageSrcAvatar = similarCommentTemplate.querySelector('.social__picture');
   var socialText = similarCommentTemplate.querySelector('.social__text');
   var socialCommentLoad = document.querySelector('.comments-loader');
-  /*var socialCommentCountInt = document.querySelector('.social__comment-count').valueOf().firstChild.data;*/
   var socialCommentCountInt = document.querySelector('.social__comment-count').valueOf();
 
-  /*document.querySelector('.social__comment-count').classList.add('visually-hidden');
-  document.querySelector('.comments-loader').classList.add('visually-hidden');*/
   document.querySelector('.big-picture__cancel').addEventListener('click', function () {
     bigPicturesBlock.classList.add('hidden');
     document.body.classList.remove('modal-open');
