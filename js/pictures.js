@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var LIMIT_COMMENTS = 0;
 
   var showPopUpSuccess = function () {
     var loadPhotoTemplate = successLoadPhotoTemplate.cloneNode(true);
@@ -60,13 +61,29 @@
           .textContent = photos[numArr]
           .comments.length;
 
-        for (var y = 0; y < photos[numArr].comments.length; y++) {
-          showBigPhotoWithComments(y, numArr);
-          document.body.classList.add('modal-open');
-        }
+        listing(numArr, photos);
+        socialCommentLoad.addEventListener('click', function () {
+          LIMIT_COMMENTS += 5;
+          listing(numArr, photos);
+        });
         addFragmentToParent(socialCommentsBlocks, fragmentForComments);
       });
     });
+  };
+
+  var listing = function (numArr, photos) {
+    var step = 5;
+    var i = LIMIT_COMMENTS;
+    if (i + step > photos[numArr].comments.length) {
+      step = photos[numArr].comments.length - i;
+      socialCommentLoad.classList.add('visually-hidden');
+    }
+    for (var y = i; y < LIMIT_COMMENTS + step; y++) {
+      document.body.classList.add('modal-open');
+      socialCommentCountInt.firstChild.data = LIMIT_COMMENTS + step + ' из ';
+      showBigPhotoWithComments(y, numArr);
+    }
+    addFragmentToParent(socialCommentsBlocks, fragmentForComments);
   };
 
   var sortingListDiscus = function () {
@@ -189,9 +206,12 @@
     .querySelector('.social__comment');
   var imageSrcAvatar = similarCommentTemplate.querySelector('.social__picture');
   var socialText = similarCommentTemplate.querySelector('.social__text');
+  var socialCommentLoad = document.querySelector('.comments-loader');
+  /*var socialCommentCountInt = document.querySelector('.social__comment-count').valueOf().firstChild.data;*/
+  var socialCommentCountInt = document.querySelector('.social__comment-count').valueOf();
 
-  document.querySelector('.social__comment-count').classList.add('visually-hidden');
-  document.querySelector('.comments-loader').classList.add('visually-hidden');
+  /*document.querySelector('.social__comment-count').classList.add('visually-hidden');
+  document.querySelector('.comments-loader').classList.add('visually-hidden');*/
   document.querySelector('.big-picture__cancel').addEventListener('click', function () {
     bigPicturesBlock.classList.add('hidden');
     document.body.classList.remove('modal-open');

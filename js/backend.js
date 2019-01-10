@@ -32,8 +32,11 @@
         onError('Что-то пошло не так :(  Код ошибки = ' + xhr.status + ' : ' + xhr.statusText);
       }
     });
+    xhr.addEventListener('timeout', function () {
+      onError('Б-е-е-е-е-да!!! Запрос не выполнился за ' + xhr.timeout / 1000 + ' секунд');
+    });
+    xhr.timeout = 5000;
     return xhr;
-
   };
 
   form.addEventListener('submit', function (evt) {
@@ -41,7 +44,6 @@
     window.backend.sending(new FormData(form), function () {
       form.reset();
       window.upload.closesWindowNewPhoto();
-      document.querySelector('.img-upload__label').style.display = 'none';
       window.pictures.showPopUpSuccess();
     },
     function () {
