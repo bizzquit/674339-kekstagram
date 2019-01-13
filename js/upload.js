@@ -31,6 +31,8 @@
    */
   function addedNewPhoto() {
     document.querySelector('.img-upload__overlay').classList.remove('hidden');
+    window.effectPhoto.effectLevelPin.style.left = '100%';
+    window.effectPhoto.effectLevelDepth.style.width = '100%';
   }
 
   var uploadFile = document.querySelector('#upload-file');
