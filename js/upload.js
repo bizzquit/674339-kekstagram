@@ -2,13 +2,14 @@
 (function () {
   var textDescription = document.querySelector('.text__description');
   var inputHashTags = document.querySelector('.text__hashtags');
+  var form = document.querySelector('#upload-select-image');
 
   /**
    * Функция закрытия окна добавление нового фото.
    * @function
    */
   var closesWindowNewPhoto = function () {
-    window.backend.form.reset();
+    form.reset();
     document.querySelector('.img-upload__overlay').classList.add('hidden');
     uploadFile.removeEventListener('change', closesWindowNewPhoto);
   };
@@ -45,6 +46,20 @@
     if (evt.keyCode === window.upload.keyCode.ESC && document.activeElement !== textDescription && document.activeElement !== inputHashTags) {
       closesWindowNewPhoto();
     }
+  });
+
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.sending(new FormData(form), function () {
+      form.reset();
+      window.upload.closesWindowNewPhoto();
+      window.pictures.showPopUpSuccess();
+    },
+    function () {
+      window.upload.reset();
+      window.upload.closesWindowNewPhoto();
+      window.pictures.showPopUpError();
+    });
   });
 
 })();

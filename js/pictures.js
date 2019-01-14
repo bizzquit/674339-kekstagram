@@ -150,7 +150,7 @@
     showPopUpError: showPopUpError,
     deletingPhotos: deletingPhotos,
     sortingListDiscus: sortingListDiscus,
-    createdPhotos: createdPhotos
+    createdPhotos: createdPhotos,
   };
 
   /**
@@ -169,6 +169,7 @@
       });
     }
     createdPhotos(data);
+    window.filters.filtersContainer.classList.remove('img-filters--inactive');
     window.originData = data.slice();
   }
 
