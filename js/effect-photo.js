@@ -55,7 +55,6 @@
     effectLevelDepth: effectLevelDepth,
     effectLevelPin: effectLevelPin
   };
-
   var changeEffectLineDepth = function () {
     effectLevelDepth
       .style.width = (effectLevelPin.offsetLeft / effectLevelLine.offsetWidth)
