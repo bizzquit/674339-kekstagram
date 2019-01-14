@@ -56,7 +56,6 @@
       .toFixed(2) * 100 + '%';
   };
 
-
   effectsListPhoto.forEach(function (element) {
     element.addEventListener('click', changeEffect);
   });

@@ -100,12 +100,19 @@
           addComments(numArr, photos);
         }
 
-        document.querySelector('.big-picture__cancel').addEventListener('click', function () {
+        document.querySelector('.big-picture__cancel').addEventListener('click', closeBigPhoto);
+        document.addEventListener('keydown', function (evt) {
+          if (evt.keyCode === window.upload.keyCode.ESC) {
+            closeBigPhoto();
+          }
+        });
+        function closeBigPhoto() {
           bigPicturesBlock.classList.add('hidden');
           document.body.classList.remove('modal-open');
           socialCommentsBlocks.innerHTML = '';
           socialCommentLoad.removeEventListener('click', loadMoreComments);
-        });
+        }
+
         addFragmentToParent(socialCommentsBlocks, fragmentForComments);
       });
     });
@@ -115,12 +122,10 @@
     var copyPhotosComments = photos[numArr].comments.slice();
     var step = 5;
     var i = limitComments;
-
     if (i + step >= copyPhotosComments.length) {
       step = copyPhotosComments.length - i;
       socialCommentLoad.classList.add('hidden');
     }
-
     for (var y = i; y < limitComments + step; y++) {
       document.body.classList.add('modal-open');
       socialCommentCountInt.firstChild.data = limitComments + step + ' из ';
@@ -128,7 +133,6 @@
     }
     addFragmentToParent(socialCommentsBlocks, fragmentForComments);
   };
-
 
   var sortingListDiscus = function () {
     data = window.originData.slice();
@@ -143,7 +147,6 @@
     });
     createdPhotos(data);
   };
-
 
   window.pictures = {
     showPopUpSuccess: showPopUpSuccess,
