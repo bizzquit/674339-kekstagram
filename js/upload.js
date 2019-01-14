@@ -2,36 +2,38 @@
 (function () {
   var textDescription = document.querySelector('.text__description');
   var inputHashTags = document.querySelector('.text__hashtags');
-
-  window.upload = {
-    textDescription: textDescription,
-    inputHashTags: inputHashTags
-  };
-
-  var KeyCode = {
-    ESC: 27,
-    ENTER: 13,
-    SPACE: 32
-  };
-
-  /**
-   * функция "псевдо" добавления нового фото срабатывает при 'change' #upload-file
-   * в конце удаляет обработчик
-   * @function
-   */
-  function addedNewPhoto() {
-    document.querySelector('.img-upload__overlay').classList.remove('hidden');
-    uploadFile.removeEventListener('change', addedNewPhoto);
-  }
+  var form = document.querySelector('#upload-select-image');
 
   /**
    * Функция закрытия окна добавление нового фото.
    * @function
    */
-  function closesWindowNewPhoto() {
+  var closesWindowNewPhoto = function () {
+    form.reset();
     document.querySelector('.img-upload__overlay').classList.add('hidden');
     uploadFile.removeEventListener('change', closesWindowNewPhoto);
-    uploadFile.removeEventListener('change', addedNewPhoto);
+  };
+
+  window.upload = {
+    textDescription: textDescription,
+    inputHashTags: inputHashTags,
+    closesWindowNewPhoto: closesWindowNewPhoto,
+    keyCode: {
+      ESC: 27,
+      ENTER: 13,
+      SPACE: 32
+    }
+  };
+
+  /**
+   * функция добавления нового фото срабатывает при 'change' #upload-file
+   * в конце удаляет обработчик
+   * @function
+   */
+  function addedNewPhoto() {
+    document.querySelector('.img-upload__overlay').classList.remove('hidden');
+    window.effectPhoto.effectLevelPin.style.left = '100%';
+    window.effectPhoto.effectLevelDepth.style.width = '100%';
   }
 
   var uploadFile = document.querySelector('#upload-file');
@@ -41,10 +43,23 @@
   imageUpWindowClose.addEventListener('click', closesWindowNewPhoto);
 
   document.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === KeyCode.ESC && document.activeElement !== textDescription && document.activeElement !== inputHashTags) {
+    if (evt.keyCode === window.upload.keyCode.ESC && document.activeElement !== textDescription && document.activeElement !== inputHashTags) {
       closesWindowNewPhoto();
     }
   });
 
+  form.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.sending(new FormData(form), function () {
+      form.reset();
+      window.upload.closesWindowNewPhoto();
+      window.pictures.showPopUpSuccess();
+    },
+    function () {
+      window.upload.reset();
+      window.upload.closesWindowNewPhoto();
+      window.pictures.showPopUpError();
+    });
+  });
 
 })();

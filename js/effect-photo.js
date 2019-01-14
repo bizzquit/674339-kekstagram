@@ -9,7 +9,14 @@
       .attributes.value.value;
     imagePreview.removeAttribute('class');
     imagePreview.classList.add('effects__preview--' + effectListPhoto);
+    effectLevelPin.style.left = '100%';
+    effectLevelDepth.style.width = '100%';
     imagePreview.style.filter = '';
+    if (effectListPhoto === 'none') {
+      effectLevel.classList.add('hidden');
+    } else {
+      effectLevel.classList.remove('hidden');
+    }
   }
 
   /**
@@ -33,16 +40,21 @@
 
   var effectsListPhoto = document.querySelectorAll('input[name="effect"]');
   var imagePreview = document.querySelector('.img-upload__preview img');
+  var effectLevel = document.querySelector('.effect-level');
   var effectLevelLine = document.querySelector('.effect-level__line');
-  var effectLevelPin = document.querySelector('.effect-level__pin');
+  var effectLevelPin = effectLevelLine.querySelector('.effect-level__pin');
+  var effectLevelDepth = effectLevelLine.querySelector('.effect-level__depth');
 
+  window.effectPhoto = {
+    effectLevelDepth: effectLevelDepth,
+    effectLevelPin: effectLevelPin
+  };
 
   var changeEffectLineDepth = function () {
-    effectLevelLine.querySelector('.effect-level__depth')
+    effectLevelDepth
       .style.width = (effectLevelPin.offsetLeft / effectLevelLine.offsetWidth)
       .toFixed(2) * 100 + '%';
   };
-
 
   effectsListPhoto.forEach(function (element) {
     element.addEventListener('click', changeEffect);

@@ -1,6 +1,5 @@
 'use strict';
 (function () {
-
   var ZOOM = 25; // Шаг зумирования
   var MIN_ZOOM = 25; // минимальное значение зума
   var MAX_ZOOM = 100; // максимальное значение зума
@@ -24,7 +23,6 @@
   var photoZoomInPhoto = document.querySelector('.scale__control--bigger');
   var photoZoomOutPhoto = document.querySelector('.scale__control--smaller');
   var photoZoomControl = document.querySelector('.scale__control--value');
-
   var valueControl = parseFloat(photoZoomControl.value);
   var imageZoom = document.querySelector('.img-upload__preview');
 
