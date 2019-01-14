@@ -1,5 +1,4 @@
 'use strict';
-
 (function () {
   var URL_LOAD = 'https://js.dump.academy/kekstagram/data';
   var URL_SEND = 'https://js.dump.academy/kekstagram';

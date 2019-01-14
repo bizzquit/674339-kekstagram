@@ -1,6 +1,5 @@
 'use strict';
 (function () {
-
   var MAX_HASHTAGS = 5; // максимальное кол-во хэштегов
   var MAX_LENGTH_HASHTAG = 25; // Максимальная длина хэштега
 

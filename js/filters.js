@@ -1,5 +1,4 @@
 'use strict';
-
 (function () {
   var filtersContainer = document.querySelector('.img-filters');
 
