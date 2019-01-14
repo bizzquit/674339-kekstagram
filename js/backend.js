@@ -4,12 +4,12 @@
   var URL_SEND = 'https://js.dump.academy/kekstagram';
 
   window.backend = {
-    loading: function (onLoad, onError) {
+    download: function (onLoad, onError) {
       var loadDataJson = createsRequestJson(onLoad, onError);
       loadDataJson.open('GET', URL_LOAD);
       loadDataJson.send();
     },
-    sending: function (data, onLoad, onError) {
+    send: function (data, onLoad, onError) {
       var sendDataForm = createsRequestJson(onLoad, onError);
       sendDataForm.open('POST', URL_SEND);
       sendDataForm.send(data);

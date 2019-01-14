@@ -227,5 +227,5 @@
     parent.appendChild(element);
   }
 
-  window.backend.loading(successHandler, errorHandler);
+  window.backend.download(successHandler, errorHandler);
 })();

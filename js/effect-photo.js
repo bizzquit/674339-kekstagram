@@ -26,18 +26,24 @@
   function changeEffectScroll() {
     var effectListPhoto = document.querySelector('input[name="effect"]:checked')
       .attributes.value.value;
+
     var result = (effectLevelPin.offsetLeft / effectLevelLine.offsetWidth).toFixed(2);
     var effectsOnPhoto = {
       'none': 'filter: none',
-      'chrome': 'filter: grayscale(' + 1 * result + ')',
-      'sepia': 'filter: sepia(' + 1 * result + ')',
-      'marvin': 'filter: invert(' + 100 * result + '%)',
-      'phobos': 'filter: blur(' + 3 * result + 'px)',
-      'heat': 'filter: brightness(' + 3 * result + ')'
+      'chrome': 'filter: grayscale(' + scaleIndexChrome * result + ')',
+      'sepia': 'filter: sepia(' + scaleIndexSepia * result + ')',
+      'marvin': 'filter: invert(' + scaleIndexMarvin * result + '%)',
+      'phobos': 'filter: blur(' + scaleIndexPhobos * result + 'px)',
+      'heat': 'filter: brightness(' + scaleIndexHeat * result + ')'
     };
     imagePreview.style = effectsOnPhoto[effectListPhoto];
   }
 
+  var scaleIndexMarvin = 100;
+  var scaleIndexPhobos = 3;
+  var scaleIndexHeat = 3;
+  var scaleIndexChrome = 1;
+  var scaleIndexSepia = 1;
   var effectsListPhoto = document.querySelectorAll('input[name="effect"]');
   var imagePreview = document.querySelector('.img-upload__preview img');
   var effectLevel = document.querySelector('.effect-level');

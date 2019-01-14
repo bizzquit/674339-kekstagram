@@ -50,7 +50,7 @@
 
   form.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.sending(new FormData(form), function () {
+    window.backend.send(new FormData(form), function () {
       form.reset();
       window.upload.closesWindowNewPhoto();
       window.pictures.showPopUpSuccess();
