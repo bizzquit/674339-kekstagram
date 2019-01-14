@@ -1,6 +1,5 @@
 'use strict';
 (function () {
-  // Функция загрузки своей фотки (файл временный - наработки)
   var imageFile = document.querySelector('#upload-file');
   var imagPreview = document.querySelector('.img-upload__preview img');
 
