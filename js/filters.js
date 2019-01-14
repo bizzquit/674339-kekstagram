@@ -14,9 +14,9 @@
     elem.addEventListener('click', function (evt) {
       activatedButtonFilter(evt);
     });
-    elem.addEventListener('click', window.debounce(myFunc));
+    elem.addEventListener('click', window.debounce(showFilteredPhoto));
 
-    function myFunc() {
+    function showFilteredPhoto() {
       window.pictures.deletingPhotos();
       if (idElement === 'filter-popular') {
         window.pictures.createdPhotos(window.originData);
